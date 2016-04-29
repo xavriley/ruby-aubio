@@ -11,8 +11,8 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Ruby bindings for the aubio audio library}
   spec.description   = %q{Aubio is a tool designed for the extraction of annotations from audio signals. Its features include segmenting a sound file before each of its attacks, performing pitch detection, tapping the beat and producing midi streams from live audio.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
-  spec.license       = "MIT"
+  spec.homepage      = "https://github.com/xavriley/ruby-aubio"
+  spec.license       = "GNU GPL v3.0"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
