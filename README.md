@@ -1,4 +1,5 @@
 # Aubio
+## warning: pre-alpha subject to change
 
 A Ruby binding for the `aubio` library.
 
@@ -83,6 +84,15 @@ e.g.
 ```
 Aubio.open("/path/to/audio/file", sample_rate: 44100)
 ```
+
+## Bugs / Still to do
+
+* better tests
+* add end of file as optional onset for slicing purposes
+* implement relative timing in offset
+* use `Offsets` class as a basis to implement the other functions
+* implement class level methods for "bpm"
+* look into streaming results for live inputs
 
 ## Development
 
