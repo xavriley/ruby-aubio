@@ -72,4 +72,9 @@ class AubioTest < Minitest::Test
     result = Aubio.open(@french_house_path).bpm
     assert_equal 126.66357966281865, result
   end
+
+  def test_it_provides_default_bpm_as_fallback
+    result = Aubio.open(@loop_amen_path).bpm
+    assert_equal 60, result
+  end
 end

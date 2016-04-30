@@ -52,6 +52,8 @@ module Aubio
       beat_locations = Beats.new(@source, @params).each.to_a
       beat_periods = beat_locations.each_cons(2).map {|a,b| b[:s] - a[:s] }
 
+      return 60.0 if beat_locations.length == 1
+
       # use interquartile median to discourage outliers
       s = beat_periods.length
       qrt_lower_idx = (s/4.0).floor
@@ -60,9 +62,6 @@ module Aubio
 
       # Calculate median
       iqs = interquartile_beat_periods.length
-
-      # debug
-      interquartile_beat_periods.sort.each {|x| puts x }
 
       iq_median_beat_period = interquartile_beat_periods.sort[(iqs/2.0).floor() - 1]
       60.0 / iq_median_beat_period
