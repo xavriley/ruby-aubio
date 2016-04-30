@@ -2,6 +2,7 @@ require_relative "aubio/version"
 require_relative "aubio/api"
 require_relative "aubio/onsets"
 require_relative "aubio/pitches"
+require_relative "aubio/notes"
 require_relative "aubio/beats"
 
 module Aubio
@@ -38,6 +39,12 @@ module Aubio
       check_for_closed
 
       Pitches.new(@source, @params).each
+    end
+
+    def notes
+      check_for_closed
+
+      Notes.new(@source, @params).each
     end
 
     def beats

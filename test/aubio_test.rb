@@ -56,6 +56,13 @@ class AubioTest < Minitest::Test
     ], result.first(1)
   end
 
+  def test_it_calculates_notes
+    result = Aubio.open(@bobby_mcferrin_path).notes.to_a
+    assert_equal [
+      {:pitch=>50.614505767822266, :confidence=>0.9164013862609863, :start=>0, :end=>0}
+    ], result.first(1)
+  end
+
   def test_it_calculates_beats
     result = Aubio.open(@loop_amen_full_path).beats.to_a
     assert_equal [
