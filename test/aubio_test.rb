@@ -3,6 +3,7 @@ require 'test_helper'
 class AubioTest < Minitest::Test
   def setup
     @loop_amen_path = File.expand_path("../sounds/loop_amen.wav", __FILE__)
+    @bobby_mcferrin_path = File.expand_path("../sounds/bobby.wav", __FILE__)
   end
 
   def test_that_it_has_a_version_number
@@ -44,5 +45,14 @@ class AubioTest < Minitest::Test
       {:s=>1.5354194641113281, :ms=>1535.41943359375, :start=> 0, :end=>0},
       {:s=>1.753310657596372, :ms=>0.001753310657596372, :start=>0, :end=>1}
     ], result
+  end
+
+  def test_it_calculates_pitches
+    result = Aubio.open(@bobby_mcferrin_path).pitches.to_a
+    require 'json'
+    File.open("/Users/xriley/Desktop/pitches.json", 'wb') {|f| f.write JSON.dump(result) }
+    assert_equal [
+      {:pitch=>50.614505767822266, :confidence=>0.9164013862609863, :start=>0, :end=>0}
+    ], result.first(1)
   end
 end

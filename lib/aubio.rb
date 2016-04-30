@@ -1,6 +1,7 @@
 require_relative "aubio/version"
 require_relative "aubio/api"
 require_relative "aubio/onsets"
+require_relative "aubio/pitches"
 
 module Aubio
   class AubioException < Exception; end
@@ -30,6 +31,12 @@ module Aubio
       check_for_closed
 
       Onsets.new(@source, @params).each
+    end
+
+    def pitches
+      check_for_closed
+
+      Pitches.new(@source, @params).each
     end
 
     private
