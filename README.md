@@ -42,7 +42,7 @@ From there you can access the following:
 
 ```
 my_file.onsets # list of extracted onsets
-# NOT YET IMPLEMENTED # my_file.pitches # list of extracted pitches
+my_file.pitches # list of extracted pitches
 # NOT YET IMPLEMENTED # my_file.beats # where one would tap their foot
 # NOT YET IMPLEMENTED # my_file.notes # list of onsets with pitches
 # NOT YET IMPLEMENTED # my_file.silences # list of silent regions
