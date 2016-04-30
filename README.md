@@ -107,5 +107,5 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/xavril
 
 ## License
 
-The gem is available as open source under the terms of the [GNU General Public License, version 3 (GPL-3.0)](http://opensource.org/licenses/GPL-3.0).
+The gem is available as open source under the terms of the [MIT](http://opensource.org/licenses/MIT).
 
