@@ -64,10 +64,12 @@ to free it up.
 Each "event" that `aubio` describes is represented as a `Hash` like so:
 
 ```
-my_file.onsets.first #=> {s: 0.0, ms: 0.0}
+my_file.onsets.first #=> {s: 0.0, ms: 0.0, start: 1, end: 0}
 ```
 
-`s` and `ms` refer to seconds and milliseconds respectively. 
+`s` and `ms` refer to seconds and milliseconds respectively.
+
+`start: 1` and `end: 1` are special events that describe the start and the end of the audio file respectively. Whilst the `start` event at `0.0s` is usually an onset, the `end` is a convenience added by the Ruby wrapper to allow for easier slicing of sound files into samples.
 
 ### Still to implement
 
@@ -96,9 +98,7 @@ Aubio.open("/path/to/audio/file", sample_rate: 44100)
 ## Bugs / Still to do
 
 * better tests
-* add end of file as optional onset for slicing purposes
-* implement relative timing in offset
-* use `Offsets` class as a basis to implement the other functions
+* use `Onsets` class as a basis to implement the other functions
 * implement class level methods for "bpm"
 * look into streaming results for live inputs
 
