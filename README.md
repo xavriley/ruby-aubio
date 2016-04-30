@@ -51,6 +51,14 @@ my_file.onsets # list of extracted onsets
 
 All of these are Ruby `Enumerator`s which means they'll respond to `.next`, and so on. If you want the whole list all at once call `.to_a` on it.
 
+### Avoiding memory leaks
+
+The underlying C library allocates some memory so to clean this up you'll need to run
+
+    my_file.close
+
+to free it up.
+
 ## Data format
 
 Each "event" that `aubio` describes is represented as a `Hash` like so:
