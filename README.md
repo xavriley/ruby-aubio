@@ -43,7 +43,7 @@ From there you can access the following:
 ```
 my_file.onsets # list of extracted onsets
 my_file.pitches # list of extracted pitches
-# NOT YET IMPLEMENTED # my_file.beats # where one would tap their foot
+my_file.beats # where one would tap their foot
 # NOT YET IMPLEMENTED # my_file.notes # list of onsets with pitches
 # NOT YET IMPLEMENTED # my_file.silences # list of silent regions
 # NOT YET IMPLEMENTED # my_file.mel_frequency_cepstral_coefficients # list of mfccs
@@ -99,7 +99,7 @@ Aubio.open("/path/to/audio/file", sample_rate: 44100)
 
 * better tests
 * use `Onsets` class as a basis to implement the other functions
-* implement class level methods for "bpm"
+* improve accuracy of bpm - seems to be consistently too fast on things I've tried
 * look into streaming results for live inputs
 
 ## Development

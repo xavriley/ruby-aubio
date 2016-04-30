@@ -2,6 +2,7 @@ require_relative "aubio/version"
 require_relative "aubio/api"
 require_relative "aubio/onsets"
 require_relative "aubio/pitches"
+require_relative "aubio/beats"
 
 module Aubio
   class AubioException < Exception; end
@@ -37,6 +38,34 @@ module Aubio
       check_for_closed
 
       Pitches.new(@source, @params).each
+    end
+
+    def beats
+      check_for_closed
+
+      Beats.new(@source, @params).each
+    end
+
+    def bpm
+      check_for_closed
+
+      beat_locations = Beats.new(@source, @params).each.to_a
+      beat_periods = beat_locations.each_cons(2).map {|a,b| b[:s] - a[:s] }
+
+      # use interquartile median to discourage outliers
+      s = beat_periods.length
+      qrt_lower_idx = (s/4.0).floor
+      qrt_upper_idx = qrt_lower_idx * 3
+      interquartile_beat_periods = beat_periods[qrt_lower_idx..qrt_upper_idx]
+
+      # Calculate median
+      iqs = interquartile_beat_periods.length
+
+      # debug
+      interquartile_beat_periods.sort.each {|x| puts x }
+
+      iq_median_beat_period = interquartile_beat_periods.sort[(iqs/2.0).floor() - 1]
+      60.0 / iq_median_beat_period
     end
 
     private

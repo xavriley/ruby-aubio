@@ -3,6 +3,8 @@ require 'test_helper'
 class AubioTest < Minitest::Test
   def setup
     @loop_amen_path = File.expand_path("../sounds/loop_amen.wav", __FILE__)
+    @loop_amen_full_path = File.expand_path("../sounds/loop_amen_full.wav", __FILE__)
+    @french_house_path = File.expand_path("../sounds/french_house_thing.wav", __FILE__)
     @bobby_mcferrin_path = File.expand_path("../sounds/bobby.wav", __FILE__)
   end
 
@@ -52,5 +54,22 @@ class AubioTest < Minitest::Test
     assert_equal [
       {:pitch=>50.614505767822266, :confidence=>0.9164013862609863, :start=>0, :end=>0}
     ], result.first(1)
+  end
+
+  def test_it_calculates_beats
+    result = Aubio.open(@loop_amen_full_path).beats.to_a
+    assert_equal [
+      {:confidence=>0.0, :s=>1.5100454092025757, :ms=>1510.04541015625, :start=>0, :end=>0}
+    ], result.first(1)
+
+    assert_equal 13, result.length
+  end
+
+  def test_it_calculates_bpm
+    # TODO: see if this can be improved
+    # the actual bpm of that sample is 125
+
+    result = Aubio.open(@french_house_path).bpm
+    assert_equal 126.66357966281865, result
   end
 end
