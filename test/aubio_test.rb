@@ -49,8 +49,6 @@ class AubioTest < Minitest::Test
 
   def test_it_calculates_pitches
     result = Aubio.open(@bobby_mcferrin_path).pitches.to_a
-    require 'json'
-    File.open("/Users/xriley/Desktop/pitches.json", 'wb') {|f| f.write JSON.dump(result) }
     assert_equal [
       {:pitch=>50.614505767822266, :confidence=>0.9164013862609863, :start=>0, :end=>0}
     ], result.first(1)
