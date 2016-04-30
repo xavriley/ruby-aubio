@@ -60,7 +60,7 @@ module Aubio
           yield output
 
           # clean up
-          Api.del_aubio_source(@source)
+          Api.del_aubio_onset(@onset)
           Api.del_fvec(@sample_buffer)
           Api.del_fvec(@out_fvec)
 
