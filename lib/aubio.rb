@@ -1,5 +1,5 @@
 require_relative "aubio/version"
-require_relative "aubio/api"
+require_relative "aubio/aubio-ffi"
 require_relative "aubio/onsets"
 require_relative "aubio/pitches"
 require_relative "aubio/beats"

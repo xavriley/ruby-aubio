@@ -102,6 +102,15 @@ Aubio.open("/path/to/audio/file", sample_rate: 44100)
 * improve accuracy of bpm - seems to be consistently too fast on things I've tried
 * look into streaming results for live inputs
 
+## Using `ffi_gen` to autogenerate bindings
+
+```
+brew install aubio
+brew install llvm --with-clang --enable-shared
+# clone this repo and cd into the root folder, then run
+LD_LIBRARY_PATH="/usr/local/opt/llvm35/lib/llvm-3.5/lib" ruby aubio-ffi-generator.rb
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
