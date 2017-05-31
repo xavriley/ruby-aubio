@@ -1,54 +1,54 @@
 module Aubio
-	class Beats
+  class Beats
 
-		def initialize(aubio_source, params)
+    def initialize(aubio_source, params)
       # TODO: cleanup param dups
-			@sample_rate = params[:sample_rate] || 44100
-			@window_size = params[:window_size] || 1024
-			@hop_size    = params[:hop_size]    || 512
+      @sample_rate = params[:sample_rate] || 44100
+      @window_size = params[:window_size] || 1024
+      @hop_size    = params[:hop_size]    || 512
 
-			@source = aubio_source
-			@tempo = Api.new_aubio_tempo('specdiff', @window_size, @hop_size, @sample_rate)
+      @source = aubio_source
+      @tempo = Api.new_aubio_tempo('specdiff', @window_size, @hop_size, @sample_rate)
 
-			# create output for source
-			@sample_buffer = Api.new_fvec(@hop_size)
-			# create output for beat
-			@out_fvec = Api.new_fvec(1)
-		end
+      # create output for source
+      @sample_buffer = Api.new_fvec(@hop_size)
+      # create output for beat
+      @out_fvec = Api.new_fvec(1)
+    end
 
-		def each
-			return enum_for(:each) unless block_given?
+    def each
+      return enum_for(:each) unless block_given?
 
-			total_frames_counter = 0
-			read_buffer = FFI::MemoryPointer.new(:int)
+      total_frames_counter = 0
+      read_buffer = FFI::MemoryPointer.new(:int)
       total_samples = Api.aubio_source_get_duration(@source).to_f
 
-			loop do
-				# Perform tempo calculation
+      loop do
+        # Perform tempo calculation
         Api.aubio_source_do(@source, @sample_buffer, read_buffer)
-				Api.aubio_tempo_do(@tempo, @sample_buffer, @out_fvec)
+        Api.aubio_tempo_do(@tempo, @sample_buffer, @out_fvec)
 
         # Retrieve result
-				is_beat = Api.fvec_get_sample(@out_fvec, 0)
+        is_beat = Api.fvec_get_sample(@out_fvec, 0)
         no_of_bytes_read = read_buffer.read_int
         total_frames_counter += no_of_bytes_read
 
         if is_beat > 0.0
           tempo_samples = Api.aubio_tempo_get_last(@tempo)
-					tempo_seconds = Api.aubio_tempo_get_last_s(@tempo)
-					tempo_milliseconds = Api.aubio_tempo_get_last_ms(@tempo)
+          tempo_seconds = Api.aubio_tempo_get_last_s(@tempo)
+          tempo_milliseconds = Api.aubio_tempo_get_last_ms(@tempo)
           tempo_confidence = Api.aubio_tempo_get_confidence(@tempo)
 
-					output = {
+          output = {
             :confidence => tempo_confidence,
             :s => tempo_seconds,
             :ms => tempo_milliseconds,
             :sample_no => tempo_samples,
             :total_samples => total_samples,
             :rel_start => tempo_samples/total_samples
-					}
+          }
           yield output
-				end
+        end
 
         if no_of_bytes_read != @hop_size
           # there's no more audio to look at
@@ -71,8 +71,8 @@ module Aubio
 
           break
         end
-			end
-		end
+      end
+    end
 
-	end
+  end
 end
