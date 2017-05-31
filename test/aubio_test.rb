@@ -58,12 +58,17 @@ class AubioTest < Minitest::Test
   end
 
   def test_it_calculates_beats
-    result = Aubio.open(@loop_amen_full_path).beats.to_a
+    result = Aubio.open(@loop_amen_full_path).beats
     assert_equal [
-      {:confidence=>0.0, :s=>1.5100454092025757, :ms=>1510.04541015625, :start=>0, :end=>0}
+      {:confidence=>1, :s=>0.0, :ms=>0.0, :sample_no=>0, :total_samples=>302400.0, :rel_start=>0.0, :rel_end=>0.2202149470899471}
     ], result.first(1)
 
     assert_equal 13, result.length
+  end
+
+  def test_it_filters_beats_based_on_minimum_interval
+    result = Aubio.open(@loop_amen_full_path, minioi: 0.5).beats
+    assert_equal 8, result.length
   end
 
   def test_it_calculates_bpm

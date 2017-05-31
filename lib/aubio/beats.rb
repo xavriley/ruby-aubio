@@ -21,6 +21,7 @@ module Aubio
 
 			total_frames_counter = 0
 			read_buffer = FFI::MemoryPointer.new(:int)
+      total_samples = Api.aubio_source_get_duration(@source).to_f
 
 			loop do
 				# Perform tempo calculation
@@ -33,6 +34,7 @@ module Aubio
         total_frames_counter += no_of_bytes_read
 
         if is_beat > 0.0
+          tempo_samples = Api.aubio_tempo_get_last(@tempo)
 					tempo_seconds = Api.aubio_tempo_get_last_s(@tempo)
 					tempo_milliseconds = Api.aubio_tempo_get_last_ms(@tempo)
           tempo_confidence = Api.aubio_tempo_get_confidence(@tempo)
@@ -41,8 +43,9 @@ module Aubio
             :confidence => tempo_confidence,
             :s => tempo_seconds,
             :ms => tempo_milliseconds,
-            :start => (tempo_seconds == 0.0 ? 1 : 0),
-            :end => 0
+            :sample_no => tempo_samples,
+            :total_samples => total_samples,
+            :rel_start => tempo_samples/total_samples
 					}
           yield output
 				end
@@ -56,8 +59,8 @@ module Aubio
             :confidence => 1.0,
             :s => total_time,
             :ms => total_time/1000.0,
-            :start => 0,
-            :end  => 1
+            :sample_no => total_samples,
+            :total_samples => total_samples
           }
           yield output
 
