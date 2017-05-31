@@ -51,9 +51,9 @@ class AubioTest < Minitest::Test
   end
 
   def test_it_calculates_pitches
-    result = Aubio.open(@bobby_mcferrin_path).pitches.to_a
+    result = Aubio.open(@bobby_mcferrin_path, pitch_method: 'yinfft', confidence_thresh: 0.9).pitches.to_a
     assert_equal [
-      {:pitch=>50.614505767822266, :confidence=>0.9164013862609863, :start=>0, :end=>0}
+      {:pitch=>69.69815826416016, :confidence=>0.9001411199569702, :start=>0, :end=>0}
     ], result.first(1)
   end
 

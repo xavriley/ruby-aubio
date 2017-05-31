@@ -7,10 +7,18 @@ module Aubio
 			@window_size = params[:window_size] || 1024
 			@hop_size    = params[:hop_size]    || 512
 
+      # Set the tolerance for the pitch detection algorithm.
+      # Typical values range between 0.2 and 0.9.
+      # Pitch candidates found with a confidence less than this threshold will not be selected.
+      # The higher the threshold, the more confidence in the candidates.
+      @confidence_thresh  = params[:confidence_thresh]  || 0.9
+
+      @pitch_method = params[:pitch_method] || "yinfft"
+
 			@source = aubio_source
-			@pitch = Api.new_aubio_pitch('yin', @window_size, @hop_size, @sample_rate)
+      @pitch = Api.new_aubio_pitch(@pitch_method, @window_size, @hop_size, @sample_rate)
 			Api.aubio_pitch_set_unit(@pitch, 'midi')
-			Api.aubio_pitch_set_tolerance(@pitch, 0.8)
+      Api.aubio_pitch_set_tolerance(@pitch, @confidence_thresh)
 
 			# create output for source
 			@sample_buffer = Api.new_fvec(@hop_size)
@@ -36,7 +44,7 @@ module Aubio
         no_of_bytes_read = read_buffer.read_int
         total_frames_counter += no_of_bytes_read
 
-        if (last_pitch - pitch).abs >= 1 and confidence > 0.9
+        if (last_pitch - pitch).abs >= 1 and confidence > @confidence_thresh
 					output = {
             :pitch => pitch,
             :confidence => confidence,
