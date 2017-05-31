@@ -14,6 +14,15 @@ In their own words...
 
 `brew install aubio --with-libsndfile --with-fftw --with-libsamplerate`
 
+## Using `ffi_gen` to autogenerate bindings
+
+```
+brew install aubio --with-libsndfile --with-fftw --with-libsamplerate
+brew install llvm --with-clang --enable-shared
+# clone this repo and cd into the root folder, then run
+LD_LIBRARY_PATH="/usr/local/opt/llvm35/lib/llvm-3.5/lib" ruby aubio-ffi-generator.rb
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -101,15 +110,6 @@ Aubio.open("/path/to/audio/file", sample_rate: 44100)
 * use `Onsets` class as a basis to implement the other functions
 * improve accuracy of bpm - seems to be consistently too fast on things I've tried
 * look into streaming results for live inputs
-
-## Using `ffi_gen` to autogenerate bindings
-
-```
-brew install aubio
-brew install llvm --with-clang --enable-shared
-# clone this repo and cd into the root folder, then run
-LD_LIBRARY_PATH="/usr/local/opt/llvm35/lib/llvm-3.5/lib" ruby aubio-ffi-generator.rb
-```
 
 ## Development
 
