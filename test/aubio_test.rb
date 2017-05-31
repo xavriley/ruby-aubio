@@ -2,6 +2,7 @@ require 'test_helper'
 
 class AubioTest < Minitest::Test
   def setup
+    @not_audio_file_path = File.expand_path("../sounds/not_an_audio_file.txt", __FILE__)
     @loop_amen_path = File.expand_path("../sounds/loop_amen.wav", __FILE__)
     @loop_amen_full_path = File.expand_path("../sounds/loop_amen_full.wav", __FILE__)
     @french_house_path = File.expand_path("../sounds/french_house_thing.wav", __FILE__)
@@ -20,7 +21,7 @@ class AubioTest < Minitest::Test
 
   def test_it_checks_file_is_readable_audio
     assert_raises Aubio::InvalidAudioInput do
-      Aubio.open("/Users/xriley/Projects/aubio/Gemfile")
+      Aubio.open(@not_audio_file_path)
     end
   end
 
