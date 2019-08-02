@@ -4,7 +4,7 @@ module Aubio
   module LegacyApi #:nodoc
     extend FFI::Library
     # idea inspired by https://github.com/qoobaa/magic/blob/master/lib/magic/api.rb
-    lib_paths = Array(ENV["AUBIO_LIB"] || Dir["/{opt,usr}/{,local/}{lib,lib64,Cellar/aubio**}/libaubio.{*.dylib,so.*}"])
+    lib_paths = Array(ENV["AUBIO_LIB"] || Dir["/{opt,usr}/{,local/}{lib,lib64,Cellar/aubio**,lib/arm-linux-gnueabihf}/libaubio.{*.dylib,so.*}"])
     fallback_names = %w(libaubio.4.2.2.dylib libaubio.so.1 aubio1.dll)
     ffi_lib(lib_paths + fallback_names)
 
