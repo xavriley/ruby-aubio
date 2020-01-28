@@ -14,10 +14,11 @@ module Aubio
     def initialize(path, params)
       raise FileNotFound unless File.file?(path)
 
-			sample_rate = params[:sample_rate] || 44100
-			hop_size    = params[:hop_size]    || 512
+      sample_rate = params[:sample_rate] || 44100
+      hop_size    = params[:hop_size]    || 512
 
-			@source = Api.new_aubio_source(path, sample_rate, hop_size)
+      @is_closed = false
+      @source = Api.new_aubio_source(path, sample_rate, hop_size)
       @params = params
 
       check_for_valid_audio_source(path)
@@ -119,7 +120,7 @@ module Aubio
 
             Couldn't read file at #{path}
             Did you install aubio with libsndfile support?
-          })
+                                    })
       end
     end
   end
