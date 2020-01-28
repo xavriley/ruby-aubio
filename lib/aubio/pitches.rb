@@ -13,7 +13,7 @@ module Aubio
       # The higher the threshold, the more confidence in the candidates.
       @confidence_thresh  = params[:confidence_thresh]  || 0.9
 
-      @pitch_method = params[:pitch_method] || "yinfft"
+      @pitch_method = params[:pitch_method] || "yinfast"
 
       @source = aubio_source
       @pitch = Api.new_aubio_pitch(@pitch_method, @window_size, @hop_size, @sample_rate)
