@@ -6,7 +6,7 @@ class AubioTest < Minitest::Test
     @loop_amen_path = File.expand_path("../sounds/loop_amen.wav", __FILE__)
     @loop_amen_full_path = File.expand_path("../sounds/loop_amen_full.wav", __FILE__)
     @french_house_path = File.expand_path("../sounds/french_house_thing.wav", __FILE__)
-    @bobby_mcferrin_path = File.expand_path("../sounds/bobby.wav", __FILE__)
+    @acappella_path = File.expand_path("../sounds/acappella.mp3", __FILE__)
   end
 
   def test_that_it_has_a_version_number
@@ -47,8 +47,8 @@ class AubioTest < Minitest::Test
   end
 
   def test_it_calculates_pitches
-    result = Aubio.open(@bobby_mcferrin_path, pitch_method: 'yinfast', confidence_thresh: 0.9).pitches.to_a
-    assert_in_delta 50.0, result[0][:pitch], 1.0
+    result = Aubio.open(@acappella_path, pitch_method: 'yinfast', confidence_thresh: 0.9).pitches.to_a
+    assert_in_delta 62.0, result[0][:pitch], 1.0
   end
 
   def test_it_calculates_beats
