@@ -1,5 +1,4 @@
-# Aubio
-## warning: pre-alpha subject to change
+# Ruby Aubio
 
 A Ruby binding for the `aubio` library.
 
@@ -16,11 +15,23 @@ In their own words...
 
 ## Using `ffi_gen` to autogenerate bindings
 
+This is optional, and something being considered for future development. The
+`ffi_gen` gem can analyse a library using clang to automatically write the ffi
+bindings for us (similar to `bindgen` in Rust as I understand it).
+
+You can see the results in the `autogen_bindings` branch.
+
 ```
 brew install aubio --with-libsndfile --with-fftw --with-libsamplerate
 brew install llvm --with-clang --enable-shared
 # clone this repo and cd into the root folder, then run
 LD_LIBRARY_PATH="/usr/local/opt/llvm35/lib/llvm-3.5/lib" ruby aubio-ffi-generator.rb
+```
+
+## Running tests
+
+```
+$ rake clobber && rake build && rake test
 ```
 
 ## Installation
