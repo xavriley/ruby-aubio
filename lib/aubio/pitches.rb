@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 module Aubio
   class Pitches
-
     def initialize(aubio_source, params)
       # TODO: cleanup param dups
-      @sample_rate = params[:sample_rate] || 44100
+      @sample_rate = params[:sample_rate] || 44_100
       @window_size = params[:window_size] || 1024
       @hop_size    = params[:hop_size]    || 512
 
@@ -11,9 +12,9 @@ module Aubio
       # Typical values range between 0.2 and 0.9.
       # Pitch candidates found with a confidence less than this threshold will not be selected.
       # The higher the threshold, the more confidence in the candidates.
-      @confidence_thresh  = params[:confidence_thresh]  || 0.9
+      @confidence_thresh = params[:confidence_thresh] || 0.9
 
-      @pitch_method = params[:pitch_method] || "yinfast"
+      @pitch_method = params[:pitch_method] || 'yinfast'
 
       @source = aubio_source
       @pitch = Api.new_aubio_pitch(@pitch_method, @window_size, @hop_size, @sample_rate)
@@ -44,40 +45,39 @@ module Aubio
         no_of_bytes_read = read_buffer.read_int
         total_frames_counter += no_of_bytes_read
 
-        if (last_pitch - pitch).abs >= 1 and confidence > @confidence_thresh
+        if ((last_pitch - pitch).abs >= 1) && (confidence > @confidence_thresh)
           output = {
-            :pitch => pitch,
-            :confidence => confidence,
-            :start => (total_frames_counter == 0 ? 1 : 0),
-            :end => 0
+            pitch: pitch,
+            confidence: confidence,
+            start: (total_frames_counter == 0 ? 1 : 0),
+            end: 0
           }
           yield output
         end
 
         last_pitch = pitch
 
-        if no_of_bytes_read != @hop_size
-          # there's no more audio to look at
+        next unless no_of_bytes_read != @hop_size
 
-          # Let's output one last pitch to mark the end of the file
-          total_time = total_frames_counter.to_f / @sample_rate.to_f
-          output = {
-            :pitch => pitch,
-            :confidence => confidence,
-            :start => 0,
-            :end  => 1
-          }
-          yield output
+        # there's no more audio to look at
 
-          # clean up
-          Api.del_aubio_pitch(@pitch)
-          Api.del_fvec(@sample_buffer)
-          Api.del_fvec(@out_fvec)
+        # Let's output one last pitch to mark the end of the file
+        total_time = total_frames_counter.to_f / @sample_rate.to_f
+        output = {
+          pitch: pitch,
+          confidence: confidence,
+          start: 0,
+          end: 1
+        }
+        yield output
 
-          break
-        end
+        # clean up
+        Api.del_aubio_pitch(@pitch)
+        Api.del_fvec(@sample_buffer)
+        Api.del_fvec(@out_fvec)
+
+        break
       end
     end
-
   end
 end

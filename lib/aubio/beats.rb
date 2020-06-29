@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 module Aubio
   class Beats
-
     def initialize(aubio_source, params)
       # TODO: cleanup param dups
-      @sample_rate = params[:sample_rate] || 44100
+      @sample_rate = params[:sample_rate] || 44_100
       @window_size = params[:window_size] || 1024
       @hop_size    = params[:hop_size]    || 512
 
@@ -40,39 +41,38 @@ module Aubio
           tempo_confidence = Api.aubio_tempo_get_confidence(@tempo)
 
           output = {
-            :confidence => tempo_confidence,
-            :s => tempo_seconds,
-            :ms => tempo_milliseconds,
-            :sample_no => tempo_samples,
-            :total_samples => total_samples,
-            :rel_start => tempo_samples/total_samples
+            confidence: tempo_confidence,
+            s: tempo_seconds,
+            ms: tempo_milliseconds,
+            sample_no: tempo_samples,
+            total_samples: total_samples,
+            rel_start: tempo_samples / total_samples
           }
           yield output
         end
 
-        if no_of_bytes_read != @hop_size
-          # there's no more audio to look at
+        next unless no_of_bytes_read != @hop_size
 
-          # Let's output one last tempo to mark the end of the file
-          total_time = total_frames_counter.to_f / @sample_rate.to_f
-          output = {
-            :confidence => 1.0,
-            :s => total_time,
-            :ms => total_time/1000.0,
-            :sample_no => total_samples,
-            :total_samples => total_samples
-          }
-          yield output
+        # there's no more audio to look at
 
-          # clean up
-          Api.del_aubio_tempo(@tempo)
-          Api.del_fvec(@sample_buffer)
-          Api.del_fvec(@out_fvec)
+        # Let's output one last tempo to mark the end of the file
+        total_time = total_frames_counter.to_f / @sample_rate.to_f
+        output = {
+          confidence: 1.0,
+          s: total_time,
+          ms: total_time / 1000.0,
+          sample_no: total_samples,
+          total_samples: total_samples
+        }
+        yield output
 
-          break
-        end
+        # clean up
+        Api.del_aubio_tempo(@tempo)
+        Api.del_fvec(@sample_buffer)
+        Api.del_fvec(@out_fvec)
+
+        break
       end
     end
-
   end
 end

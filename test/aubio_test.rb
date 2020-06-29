@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class AubioTest < Minitest::Test
   def setup
-    @not_audio_file_path = File.expand_path("../sounds/not_an_audio_file.txt", __FILE__)
-    @loop_amen_path = File.expand_path("../sounds/loop_amen.wav", __FILE__)
-    @loop_amen_full_path = File.expand_path("../sounds/loop_amen_full.wav", __FILE__)
-    @french_house_path = File.expand_path("../sounds/french_house_thing.wav", __FILE__)
-    @acappella_path = File.expand_path("../sounds/acappella.mp3", __FILE__)
+    @not_audio_file_path = File.expand_path('sounds/not_an_audio_file.txt', __dir__)
+    @loop_amen_path = File.expand_path('sounds/loop_amen.wav', __dir__)
+    @loop_amen_full_path = File.expand_path('sounds/loop_amen_full.wav', __dir__)
+    @french_house_path = File.expand_path('sounds/french_house_thing.wav', __dir__)
+    @acappella_path = File.expand_path('sounds/acappella.mp3', __dir__)
   end
 
   def test_that_it_has_a_version_number
@@ -15,7 +17,7 @@ class AubioTest < Minitest::Test
 
   def test_it_checks_file_existence
     assert_raises Aubio::FileNotFound do
-      result = Aubio.open(@loop_amen_path + "e")
+      result = Aubio.open(@loop_amen_path + 'e')
     end
   end
 
@@ -36,10 +38,10 @@ class AubioTest < Minitest::Test
   def test_it_calculates_onsets
     result = Aubio.open(@loop_amen_path).onsets.to_a
     pairs = result.take(3).zip([
-      {:s=>0.0, :ms=>0.0, :start=> 1, :end=>0},
-      {:s=>0.21174603700637817, :ms=>211.74603271484375, :start=> 0, :end=>0},
-      {:s=>0.4404761791229248, :ms=>440.4761657714844, :start=> 0, :end=>0},
-    ])
+                                 { s: 0.0, ms: 0.0, start: 1, end: 0 },
+                                 { s: 0.21174603700637817, ms: 211.74603271484375, start: 0, end: 0 },
+                                 { s: 0.4404761791229248, ms: 440.4761657714844, start: 0, end: 0 }
+                               ])
 
     pairs.each do |expected, actual|
       assert_in_delta expected[:s], actual[:s], 0.25
@@ -54,7 +56,7 @@ class AubioTest < Minitest::Test
   def test_it_calculates_beats
     result = Aubio.open(@loop_amen_full_path).beats
     assert_equal [
-      {:confidence=>1, :s=>0.0, :ms=>0.0, :sample_no=>0, :total_samples=>302400.0, :rel_start=>0.0, :rel_end=>0.2202149470899471}
+      { confidence: 1, s: 0.0, ms: 0.0, sample_no: 0, total_samples: 302_400.0, rel_start: 0.0, rel_end: 0.2202149470899471 }
     ], result.first(1)
 
     assert_equal 13, result.length
