@@ -55,9 +55,7 @@ class AubioTest < Minitest::Test
 
   def test_it_calculates_beats
     result = Aubio.open(@loop_amen_full_path).beats
-    assert_equal [
-      { confidence: 1, s: 0.0, ms: 0.0, sample_no: 0, total_samples: 302_400.0, rel_start: 0.0, rel_end: 0.2202149470899471 }
-    ], result.first(1)
+    assert_in_delta 0.2202, result[0][:rel_end], 0.0001
 
     assert_equal 13, result.length
   end
@@ -72,7 +70,7 @@ class AubioTest < Minitest::Test
     # the actual bpm of that sample is 125
 
     result = Aubio.open(@french_house_path).bpm
-    assert_equal 126.66357966281865, result
+    assert_in_delta 126.6635, result, 0.01
   end
 
   def test_it_provides_default_bpm_as_fallback
